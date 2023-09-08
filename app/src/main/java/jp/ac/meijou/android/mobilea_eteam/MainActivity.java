@@ -20,6 +20,12 @@ private ActivityMainBinding binding;
             startActivity(intent);
         });
 
+//AddMoneyMemoに遷移
+//        binding.button6.setOnClickListener(view -> {
+//            var intent = new Intent(this, totalActivity.class);
+//            startActivity(intent);
+//        });
+
     }
 
 }
