@@ -5,21 +5,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import jp.ac.meijou.android.mobilea_eteam.databinding.ActivityMainBinding;
+import jp.ac.meijou.android.mobilea_eteam.databinding.ActivityTotalBinding;
 
-public class MainActivity extends AppCompatActivity {
-private ActivityMainBinding binding;
+public class totalActivity extends AppCompatActivity {
+    private ActivityTotalBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        binding = ActivityTotalBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.button4.setOnClickListener(view -> {
-            var intent = new Intent(this, totalActivity.class);
+        binding.button5.setOnClickListener(view -> {
+            var intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         });
-
     }
-
 }
