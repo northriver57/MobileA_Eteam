@@ -11,6 +11,8 @@ import android.os.Bundle;
 
 import java.util.Optional;
 
+import jp.ac.meijou.android.mobilea_eteam.databinding.ActivityAddMoneyMemoBinding;
+
 public class AddMoneyMemoActivity extends AppCompatActivity {
 
     private ActivityAddMoneyMemoBinding binding;
@@ -18,7 +20,7 @@ public class AddMoneyMemoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityAddMoneyMemo.inflate(getLayoutInflater());
+        binding = ActivityAddMoneyMemoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         binding.AddCompleteButton.setOnClickListener(view -> {
