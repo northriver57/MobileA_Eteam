@@ -33,34 +33,27 @@ public class GraphActivity extends AppCompatActivity {
     private void createPieChart() {
 
         binding.pieChart.setDrawHoleEnabled(true);//穴あけ
-        binding.pieChart.setHoleRadius(50f);//穴サイズ％
-        binding.pieChart.setTransparentCircleRadius(55f);
-        binding.pieChart.setRotationAngle(270);//回転開始位置
-        binding.pieChart.setRotationEnabled(true);
+        binding.pieChart.setHoleRadius(30f);//穴サイズ％
+        binding.pieChart.setTransparentCircleRadius(10f);
+        binding.pieChart.setRotationEnabled(false);
         binding.pieChart.getLegend().setEnabled(true);
-    //    binding.pieChart.setDescription("PieChart");
         binding.pieChart.setData(ChartData());
 
         binding.pieChart.invalidate();//更新
-        binding.pieChart.animateXY(2000,2000);//表示アニメーション
     }
 
     private PieData ChartData() {
-        ArrayList<PieEntry> yVals = new ArrayList<>();
-        ArrayList<String> xVals = new ArrayList<>();
+        ArrayList<PieEntry> rate = new ArrayList<>();
         ArrayList<Integer> colors = new ArrayList<>();
 
-        xVals.add("A");
-        xVals.add("B");
-        xVals.add("C");
+        //割合とそのラベルを直接入力
+        rate.add(new PieEntry(20, "A"));
+        rate.add(new PieEntry(30, "B"));
+        rate.add(new PieEntry(50, "C"));
 
-        yVals.add(new PieEntry(20, 0));
-        yVals.add(new PieEntry(30, 1));
-        yVals.add(new PieEntry(50, 2));
-
-        PieDataSet dataSet = new PieDataSet(yVals, "Data");
+        PieDataSet dataSet = new PieDataSet(rate, "Data");
         dataSet.setSliceSpace(5f);
-        dataSet.setSelectionShift(1f);
+        dataSet.setSelectionShift(0f);
 
         // 色の設定
         colors.add(ColorTemplate.COLORFUL_COLORS[0]);
@@ -69,13 +62,19 @@ public class GraphActivity extends AppCompatActivity {
         dataSet.setColors(colors);
         dataSet.setDrawValues(true);
 
+
         PieData data = new PieData(dataSet);
         data.setValueFormatter(new PercentFormatter());
+        data.setDrawValues(true);
+
 
         // テキストの設定
         data.setValueTextSize(12f);
         data.setValueTextColor(Color.WHITE);
         return data;
+
+
     }
+
 
 }
