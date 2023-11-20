@@ -18,6 +18,12 @@
             android:exported="false" />
 
         <activity
+            android:name=".GraphActivity"
+            android:exported="false">
+
+        </activity>
+
+        <activity
             android:name=".MainActivity"
             android:exported="true">
 
