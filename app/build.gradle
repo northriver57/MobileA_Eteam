@@ -5,12 +5,12 @@ plugins {
 android {
 
     namespace 'jp.ac.meijou.android.mobilea_eteam'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "jp.ac.meijou.android.mobilea_eteam"
         minSdk 24
-        targetSdk 33
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -47,4 +47,10 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
+
+    def room_version ="2.6.0"
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+    androidTestImplementation "androidx.room:room-testing:$room_version"
 }

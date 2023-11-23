@@ -12,13 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MobileA_Eteam"
         tools:targetApi="31">
-        <activity
 
-            android:name=".totalActivity"
-            android:exported="false" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".RecordActivity"
             android:exported="true">
 
 
