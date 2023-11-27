@@ -9,7 +9,9 @@ import androidx.room.PrimaryKey;
 public class DataRoom{
     @PrimaryKey(autoGenerate = true)
     public int id; //主キー
-    public int classification;//「支出分類」カラムを定義
+
+    public String classification;//「支出分類」カラムを定義
+
     public int asset;       //「資産の種類」カラムを定義
     public int price;        //「金額」カラムを定義
     public String content;   //「内容」カラムを定義
@@ -23,7 +25,9 @@ public class DataRoom{
      * @param content 内容
      * @param date    日付
      */
-    public DataRoom(int classification, int asset, int price, String content, long date) {
+
+    public DataRoom(String classification, int asset, int price, String content, long date) {
+
         this.classification = classification;
         this.asset = asset;      //「資産の種類」を設定
         this.price = price;      //「金額」を設定
@@ -35,7 +39,9 @@ public class DataRoom{
      * 「支出分類」を取得（Getter）
      * @return classification
      */
-    public int getClassification() {
+
+    public String getClassification() {
+
         return classification;
     }
     /**
@@ -79,7 +85,9 @@ public class DataRoom{
      * @param date    更新する「日付」
      * @return 更新した「家計簿データ」
      */
-    public DataRoom update(int classification, int asset, int price, String content, long date) {
+
+    public DataRoom update(String classification, int asset, int price, String content, long date) {
+
         this.classification = classification;
         this.asset = asset;      //「資産の種類」を設定
         this.price = price;      //「金額」を設定
