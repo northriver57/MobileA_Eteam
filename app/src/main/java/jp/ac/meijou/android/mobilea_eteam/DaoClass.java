@@ -1,5 +1,7 @@
 package jp.ac.meijou.android.mobilea_eteam;
 import java.util.List;
+
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -40,4 +42,7 @@ public interface DaoClass {
      */
     @Delete
     void delete(DataRoom ad);
+
+    @Query("SELECT * FROM data_room ORDER BY date ASC")
+    LiveData<List<DataRoom>> getAllData();
 }
