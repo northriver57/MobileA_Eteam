@@ -48,7 +48,7 @@ private ActivityMainBinding binding;
         });
 
         binding.button6.setOnClickListener(view -> {
-            var intent = new Intent(this, PlusActivity.class);
+            var intent = new Intent(this, RecordActivity.class);
             startActivity(intent);
         });
     }
