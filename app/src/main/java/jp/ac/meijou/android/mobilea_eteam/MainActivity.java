@@ -36,6 +36,21 @@ private ActivityMainBinding binding;
             var intent = new Intent(this, totalActivity.class);
             startActivity(intent);
         });
+
+        binding.button3.setOnClickListener(view -> {
+            var intent = new Intent(this, LineActivity.class);
+            startActivity(intent);
+        });
+
+        binding.button2.setOnClickListener(view -> {
+            var intent = new Intent(this, PieActivity.class);
+            startActivity(intent);
+        });
+
+        binding.button6.setOnClickListener(view -> {
+            var intent = new Intent(this, PlusActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void updateTextView12(List<DataRoom> newData) {
