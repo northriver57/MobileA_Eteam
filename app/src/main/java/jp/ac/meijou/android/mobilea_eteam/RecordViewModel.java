@@ -22,8 +22,8 @@ public class RecordViewModel extends AndroidViewModel {
         return allData;
     }
 
-    public void insertData(String classification, int asset, int price, String content) {
-        new InsertAsyncTask(dao).execute(new DataRoom(classification, asset, price, content, Calendar.getInstance().getTimeInMillis()));
+    public void insertData(String classification, String asset, int price, String content, long date) {
+        new InsertAsyncTask(dao).execute(new DataRoom(classification, asset, price, content, date));
     }
 
     private static class InsertAsyncTask extends AsyncTask<DataRoom, Void, Void> {

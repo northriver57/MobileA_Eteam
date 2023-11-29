@@ -12,7 +12,7 @@ public class DataRoom{
 
     public String classification;//「支出分類」カラムを定義
 
-    public int asset;       //「資産の種類」カラムを定義
+    public String asset;       //「資産の種類」カラムを定義
     public int price;        //「金額」カラムを定義
     public String content;   //「内容」カラムを定義
     public long date;        //「日付」カラムを定義
@@ -26,7 +26,7 @@ public class DataRoom{
      * @param date    日付
      */
 
-    public DataRoom(String classification, int asset, int price, String content, long date) {
+    public DataRoom(String classification, String asset, int price, String content, long date) {
 
         this.classification = classification;
         this.asset = asset;      //「資産の種類」を設定
@@ -48,13 +48,13 @@ public class DataRoom{
     * 「資産の種類」を取得（Getter）
      * @return asset
     */
-    public int getAsset() {
+    public String getAsset() {
         return asset;
     }
 
     /**
      * 「価格」を取得（Getter）
-     * @return
+     * @return price
      */
     public int getPrice() {
         return price;
@@ -70,7 +70,7 @@ public class DataRoom{
 
     /**
      *　「日付」を取得（Getter）
-     * @return
+     * @return date
      */
     public long getDate() {
         return date;
@@ -78,7 +78,7 @@ public class DataRoom{
 
     /**
      * 「家計簿データ」を更新
-     * @param classification
+     * @param classification 更新する「支出分類」
      * @param content 更新する「内容」
      * @param asset   更新する「資産の種類」
      * @param price   更新する「金額」
@@ -86,7 +86,7 @@ public class DataRoom{
      * @return 更新した「家計簿データ」
      */
 
-    public DataRoom update(String classification, int asset, int price, String content, long date) {
+    public DataRoom update(String classification, String asset, int price, String content, long date) {
 
         this.classification = classification;
         this.asset = asset;      //「資産の種類」を設定
