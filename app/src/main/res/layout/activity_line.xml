@@ -6,6 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".LineActivity">
 
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/lineChartExample"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
     <Button
         android:id="@+id/button5"
         android:layout_width="wrap_content"
