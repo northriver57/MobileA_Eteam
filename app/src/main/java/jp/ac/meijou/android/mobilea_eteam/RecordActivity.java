@@ -1,12 +1,9 @@
 package jp.ac.meijou.android.mobilea_eteam;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-
-import java.util.Calendar;
 import jp.ac.meijou.android.mobilea_eteam.databinding.ActivityRecordBinding;
 
 public class RecordActivity extends AppCompatActivity {
@@ -27,16 +24,15 @@ public class RecordActivity extends AppCompatActivity {
 
         // OKボタンがクリックされたときの処理
         binding.OKbutton.setOnClickListener(view -> {
-            String classification = binding.classificationtext.getText().toString();
-            int asset = Integer.parseInt(binding.assettext.getText().toString());
+            String classification = binding.spinnerclass.getSelectedItem().toString();
+            String asset = binding.spinnerasset.getSelectedItem().toString();
             int price = Integer.parseInt(binding.pricetext.getText().toString());
             String content = binding.contenttext.getText().toString();
 
-            // 現在の日付を取得
-            long date = Calendar.getInstance().getTimeInMillis();
+            long date = binding.calendarView2.getDate();
 
             // ViewModelを通じてデータベースにデータを挿入
-            recordViewModel.insertData(classification, asset, price, content);
+            recordViewModel.insertData(classification, asset, price, content, date);
 
             // 登録後の処理を追加（例: MainActivityに戻るなど）
 

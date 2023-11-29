@@ -1,3 +1,23 @@
 <resources>
     <string name="app_name">MobileA_Eteam</string>
+
+    <string-array name="ListClass">
+        <item>生活費</item>
+        <item>食費</item>
+        <item>衣類</item>
+        <item>医療費</item>
+        <item>交際費</item>
+        <item>娯楽</item>
+        <item>通信費</item>
+        <item>雑費</item>
+        <item>その他</item>
+    </string-array>
+
+    <string-array name="ListAsset">
+        <item>現金</item>
+        <item>電子マネー</item>
+        <item>銀行</item>
+        <item>その他</item>
+    </string-array>
+
 </resources>
