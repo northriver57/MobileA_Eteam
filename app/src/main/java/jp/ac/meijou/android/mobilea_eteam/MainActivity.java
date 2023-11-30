@@ -3,17 +3,12 @@ package jp.ac.meijou.android.mobilea_eteam;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
-
 import java.text.SimpleDateFormat;
-
-
 import android.content.Intent;
 import android.os.Bundle;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
 import jp.ac.meijou.android.mobilea_eteam.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,6 +32,8 @@ private ActivityMainBinding binding;
             updateTextView12(newData);
         });
 
+
+
         binding.button4.setOnClickListener(view -> {
             var intent = new Intent(this, totalActivity.class);
             startActivity(intent);
@@ -58,15 +55,19 @@ private ActivityMainBinding binding;
         });
     }
 
+
+
     private void updateTextView12(List<DataRoom> newData) {
         // newDataを使用してtextView12にデータをセットする処理を実装
         StringBuilder dataText = new StringBuilder();
+        StringBuilder incomeText = new StringBuilder();
+        int totalIncome = 0;
+        int totalExpense = 0;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
 
 
         for (DataRoom data : newData) {
             String formattedDate = dateFormat.format(new Date(data.getDate()));
-
             dataText.append(data.getType()).append(" ");
             dataText.append(formattedDate).append("  ");
             dataText.append(data.getClassification()).append("  ");
@@ -74,7 +75,23 @@ private ActivityMainBinding binding;
             dataText.append(data.getAsset()).append("  ");
             dataText.append(data.getContent()).append("\n");
 
+            // "type"が1の場合のみincomeTextに追加
+            if (data.getType() == 1) {
+                incomeText.append(formattedDate).append("  ");
+                incomeText.append(data.getClassification()).append("  ");
+                incomeText.append(data.getPrice()).append("  ");
+                incomeText.append(data.getAsset()).append("  ");
+                incomeText.append(data.getContent()).append("\n");
+
+                totalIncome += data.getPrice();
+            }else if (data.getType() == 2) {
+                totalExpense += data.getPrice();
+            }
         }
         binding.textView12.setText(dataText.toString());
+        binding.incometext.setText(String.valueOf(totalIncome));
+        binding.expensetext.setText(String.valueOf(totalExpense));
+        binding.sumtext.setText(String.valueOf(totalIncome - totalExpense));
     }
+
 }
