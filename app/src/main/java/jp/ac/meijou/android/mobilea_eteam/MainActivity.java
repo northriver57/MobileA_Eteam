@@ -4,10 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.text.SimpleDateFormat;
+
+
 import android.content.Intent;
 import android.os.Bundle;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import jp.ac.meijou.android.mobilea_eteam.databinding.ActivityMainBinding;
 
@@ -56,8 +61,13 @@ private ActivityMainBinding binding;
     private void updateTextView12(List<DataRoom> newData) {
         // newDataを使用してtextView12にデータをセットする処理を実装
         StringBuilder dataText = new StringBuilder();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
+
+
         for (DataRoom data : newData) {
-            dataText.append(data.getDate()).append("  ");
+            String formattedDate = dateFormat.format(new Date(data.getDate()));
+
+            dataText.append(formattedDate).append("  ");
             dataText.append(data.getClassification()).append("  ");
             dataText.append(data.getPrice()).append("  ");
             dataText.append(data.getAsset()).append("  ");
