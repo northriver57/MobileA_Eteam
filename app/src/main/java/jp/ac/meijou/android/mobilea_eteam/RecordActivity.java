@@ -3,20 +3,19 @@ package jp.ac.meijou.android.mobilea_eteam;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.CalendarView;
+import android.widget.RadioGroup;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import jp.ac.meijou.android.mobilea_eteam.databinding.ActivityRecordBinding;
 
 public class RecordActivity extends AppCompatActivity {
-
     private ActivityRecordBinding binding;
     private RecordViewModel recordViewModel;
-
     private DaoClass dao;
     private long date;
     @Override
@@ -44,6 +43,16 @@ public class RecordActivity extends AppCompatActivity {
             date = selectedDate.getTimeInMillis();
         });
 
+        AtomicInteger type = new AtomicInteger(-1);
+        RadioGroup group = findViewById(R.id.radioGroup);
+        group.setOnCheckedChangeListener((view, id) -> {
+            if (id == R.id.RadioIncome) {
+                type.set(1);
+            } else if (id == R.id.RadioExpense) {
+                type.set(2);
+            }
+        });
+
         // OKボタンがクリックされたときの処理
         binding.OKbutton.setOnClickListener(view -> {
             String classification = binding.spinnerclass.getSelectedItem().toString();
@@ -51,16 +60,20 @@ public class RecordActivity extends AppCompatActivity {
             int price = Integer.parseInt(binding.pricetext.getText().toString());
             String content = binding.contenttext.getText().toString();
 
-            // ViewModelを通じてデータベースにデータを挿入
-            recordViewModel.insertData(classification, asset, price, content, date);
+            if (type.get() != -1) {
 
-            // 登録後の処理を追加（例: MainActivityに戻るなど）
+                    // ViewModelを通じてデータベースにデータを挿入
+                    recordViewModel.insertData(classification, asset, price, content, date, type.get());
 
-            Intent intent = new Intent(RecordActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
-
-        });
+                    // 登録後の処理を追加（例: MainActivityに戻るなど）
+                    Intent intent = new Intent(RecordActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    // タグがnullの場合の処理（デフォルト値のまま）
+                    //Toast
+                }
+            });
 
         // 「back」ボタンがクリックされたときの処理
         binding.buckbutton.setOnClickListener(view -> {

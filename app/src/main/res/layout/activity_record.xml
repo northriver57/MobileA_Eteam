@@ -9,6 +9,7 @@
         android:id="@+id/spinnerasset"
         android:layout_width="211dp"
         android:layout_height="46dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="-14dp"
         android:entries="@array/ListAsset"
         app:layout_constraintStart_toEndOf="@+id/textView13"
@@ -16,12 +17,12 @@
 
     <CalendarView
         android:id="@+id/calendarView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="384dp"
+        android:layout_height="307dp"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="30dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.513"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -29,19 +30,19 @@
         android:id="@+id/buckbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="4dp"
         android:text="back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/OKbutton"
-        app:layout_constraintHorizontal_bias="0.391"
+        app:layout_constraintHorizontal_bias="0.268"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/OKbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="56dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="4dp"
         android:text="OK"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -50,8 +51,8 @@
         android:id="@+id/textView11"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="72dp"
+        android:layout_marginTop="92dp"
         android:text="分類　　"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/calendarView2" />
@@ -79,7 +80,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="内容　　"
+        android:text="メモ　　"
         app:layout_constraintStart_toStartOf="@+id/textView14"
         app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
@@ -87,10 +88,11 @@
         android:id="@+id/pricetext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="-14dp"
         android:ems="10"
         android:inputType="text"
-        android:text="Name"
+        android:text="0"
         app:layout_constraintStart_toEndOf="@+id/textView14"
         app:layout_constraintTop_toTopOf="@+id/textView14" />
 
@@ -98,10 +100,11 @@
         android:id="@+id/contenttext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="-14dp"
         android:ems="10"
         android:inputType="text"
-        android:text="Name"
+        android:text="memo"
         app:layout_constraintStart_toEndOf="@+id/textView17"
         app:layout_constraintTop_toTopOf="@+id/textView17" />
 
@@ -109,9 +112,40 @@
         android:id="@+id/spinnerclass"
         android:layout_width="211dp"
         android:layout_height="46dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="-14dp"
         android:entries="@array/ListClass"
         app:layout_constraintStart_toEndOf="@+id/textView11"
         app:layout_constraintTop_toTopOf="@+id/textView11" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="252dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="140dp"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calendarView2">
+
+        <RadioButton
+            android:id="@+id/RadioIncome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="収入"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <RadioButton
+            android:id="@+id/RadioExpense"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="支出"
+            app:layout_constraintStart_toEndOf="@+id/radioButton3"
+            app:layout_constraintTop_toTopOf="@+id/radioButton3" />
+
+    </RadioGroup>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
