@@ -14,11 +14,20 @@
         <item>その他</item>
     </string-array>
 
+    <string-array name="ListIncome">
+        <item>給料</item>
+        <item>小遣い</item>
+        <item>手当て</item>
+        <item>ボーナス</item>
+        <item>その他</item>
+    </string-array>
+
     <string-array name="ListAsset">
         <item>現金</item>
         <item>電子マネー</item>
         <item>銀行</item>
         <item>その他</item>
     </string-array>
+
 
 </resources>

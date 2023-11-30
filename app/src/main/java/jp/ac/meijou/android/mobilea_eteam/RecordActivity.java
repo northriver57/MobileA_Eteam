@@ -2,8 +2,11 @@ package jp.ac.meijou.android.mobilea_eteam;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import java.util.Calendar;
@@ -43,10 +46,19 @@ public class RecordActivity extends AppCompatActivity {
 
         AtomicInteger type = new AtomicInteger(-1);
         RadioGroup group = findViewById(R.id.radioGroup);
+        Spinner spinnerClass = findViewById(R.id.spinnerclass);
+
         group.setOnCheckedChangeListener((view, id) -> {
             if (id == R.id.RadioIncome) {
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.ListIncome));
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinnerClass.setAdapter(adapter);
+
                 type.set(1);
             } else if (id == R.id.RadioExpense) {
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.ListClass));
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinnerClass.setAdapter(adapter);
                 type.set(2);
             }
         });

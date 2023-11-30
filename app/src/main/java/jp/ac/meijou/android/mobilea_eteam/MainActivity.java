@@ -77,7 +77,6 @@ private ActivityMainBinding binding;
 
             // "type"が1の場合のみincomeTextに追加
             if (data.getType() == 1) {
-                incomeText.append(formattedDate).append("  ");
                 incomeText.append(data.getClassification()).append("  ");
                 incomeText.append(data.getPrice()).append("  ");
                 incomeText.append(data.getAsset()).append("  ");
