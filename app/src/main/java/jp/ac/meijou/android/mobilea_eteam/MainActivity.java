@@ -67,6 +67,7 @@ private ActivityMainBinding binding;
         for (DataRoom data : newData) {
             String formattedDate = dateFormat.format(new Date(data.getDate()));
 
+            dataText.append(data.getType()).append(" ");
             dataText.append(formattedDate).append("  ");
             dataText.append(data.getClassification()).append("  ");
             dataText.append(data.getPrice()).append("  ");
