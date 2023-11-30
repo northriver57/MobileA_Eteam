@@ -4,13 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.CalendarView;
 import android.widget.RadioGroup;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import jp.ac.meijou.android.mobilea_eteam.databinding.ActivityRecordBinding;
 
 public class RecordActivity extends AppCompatActivity {

@@ -1,10 +1,8 @@
 package jp.ac.meijou.android.mobilea_eteam;
 import android.app.Application;
 import android.os.AsyncTask;
-
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import java.util.Calendar;
 import java.util.List;
 
 public class RecordViewModel extends AndroidViewModel {
