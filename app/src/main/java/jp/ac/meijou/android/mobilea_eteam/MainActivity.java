@@ -60,7 +60,6 @@ private ActivityMainBinding binding;
     private void updateTextView12(List<DataRoom> newData) {
         // newDataを使用してtextView12にデータをセットする処理を実装
         StringBuilder dataText = new StringBuilder();
-        StringBuilder incomeText = new StringBuilder();
         int totalIncome = 0;
         int totalExpense = 0;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
@@ -68,7 +67,6 @@ private ActivityMainBinding binding;
 
         for (DataRoom data : newData) {
             String formattedDate = dateFormat.format(new Date(data.getDate()));
-            dataText.append(data.getType()).append(" ");
             dataText.append(formattedDate).append("  ");
             dataText.append(data.getClassification()).append("  ");
             dataText.append(data.getPrice()).append("  ");
@@ -77,11 +75,6 @@ private ActivityMainBinding binding;
 
             // "type"が1の場合のみincomeTextに追加
             if (data.getType() == 1) {
-                incomeText.append(data.getClassification()).append("  ");
-                incomeText.append(data.getPrice()).append("  ");
-                incomeText.append(data.getAsset()).append("  ");
-                incomeText.append(data.getContent()).append("\n");
-
                 totalIncome += data.getPrice();
             }else if (data.getType() == 2) {
                 totalExpense += data.getPrice();
