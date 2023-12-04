@@ -45,7 +45,7 @@ private ActivityMainBinding binding;
         });
 
         binding.button2.setOnClickListener(view -> {
-            var intent = new Intent(this, PieActivity.class);
+            var intent = new Intent(this, GraphActivity.class);
             startActivity(intent);
         });
 
