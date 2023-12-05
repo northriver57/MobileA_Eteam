@@ -1,5 +1,4 @@
 package jp.ac.meijou.android.mobilea_eteam;
-//import static jp.ac.meijou.android.mobilea_eteam.R.id.common_buttons_container;
 
 import androidx.appcompat.app.AppCompatActivity;
 
