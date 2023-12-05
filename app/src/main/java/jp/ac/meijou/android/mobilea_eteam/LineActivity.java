@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import jp.ac.meijou.android.mobilea_eteam.databinding.ActivityLineBinding;
-import jp.ac.meijou.android.mobilea_eteam.databinding.BottomButtonBinding;
-
 import android.graphics.Color;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,7 +22,6 @@ import java.util.List;
 public class LineActivity extends AppCompatActivity {
 
     private ActivityLineBinding binding;
-    private ButtonClickListener buttonClickListener;
     private LineChart lineChart;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +29,10 @@ public class LineActivity extends AppCompatActivity {
         binding = ActivityLineBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        //BottomButtonBinding bottomButtonBinding = BottomButtonBinding.inflate(getLayoutInflater());
-
-
+        binding.button5.setOnClickListener(view -> {
+            var intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        });
 
         List<Float> x = new ArrayList<>(Arrays.asList(1f, 2f, 3f, 5f, 8f, 13f, 21f, 34f)); // X軸データ
         List<Float> y = new ArrayList<>();
@@ -76,12 +74,5 @@ public class LineActivity extends AppCompatActivity {
 
         // LineChart更新
         lineChart.invalidate();
-
-        buttonClickListener = new ButtonClickListener(this);
-
-        binding.includedLayout.button.setOnClickListener(view -> buttonClickListener.onButtonClick(MainActivity.class));
-        binding.includedLayout.button4.setOnClickListener(view -> buttonClickListener.onButtonClick(totalActivity.class));
-        binding.includedLayout.button2.setOnClickListener(view -> buttonClickListener.onButtonClick(PieActivity.class));
-
     }
 }
