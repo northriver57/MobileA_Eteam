@@ -4,22 +4,32 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import java.text.SimpleDateFormat;
-import android.content.Intent;
 import android.os.Bundle;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import jp.ac.meijou.android.mobilea_eteam.databinding.ActivityMainBinding;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 
 public class MainActivity extends AppCompatActivity {
-private ActivityMainBinding binding;
+    private ActivityMainBinding binding;
     private RecordViewModel recordViewModel;
     private ButtonClickListener buttonClickListener;
+    private RecyclerView recyclerView;
+    private ItemAdapter itemAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        // RecyclerViewの設定
+        recyclerView = findViewById(R.id.listView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        itemAdapter = new ItemAdapter();
+        recyclerView.setAdapter(itemAdapter);
 
         // RecordViewModelを初期化
         recordViewModel = new ViewModelProvider(this).get(RecordViewModel.class);
@@ -31,6 +41,7 @@ private ActivityMainBinding binding;
         allData.observe(this, newData -> {
             // データが変更されたときの処理
             updateTextView12(newData);
+            itemAdapter.setData(newData);
         });
 
 
@@ -68,7 +79,7 @@ private ActivityMainBinding binding;
                 totalExpense += data.getPrice();
             }
         }
-        binding.textView12.setText(dataText.toString());
+
         binding.incometext.setText(String.valueOf(totalIncome));
         binding.expensetext.setText(String.valueOf(totalExpense));
         binding.sumtext.setText(String.valueOf(totalIncome - totalExpense));
