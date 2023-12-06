@@ -35,6 +35,10 @@ public class DataRoom{
         this.type = type;
     }
 
+    public int getId(){
+        return id;
+    }
+
     /**
      * 「支出分類」を取得（Getter）
      * @return classification

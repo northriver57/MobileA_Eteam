@@ -1,13 +1,12 @@
 package jp.ac.meijou.android.mobilea_eteam;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
-import java.text.SimpleDateFormat;
+import android.content.DialogInterface;
 import android.os.Bundle;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import jp.ac.meijou.android.mobilea_eteam.databinding.ActivityMainBinding;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private ButtonClickListener buttonClickListener;
     private RecyclerView recyclerView;
     private ItemAdapter itemAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +29,13 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.listView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         itemAdapter = new ItemAdapter();
+        itemAdapter.setOnItemClickListener(new ItemAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(long itemId) {
+                // アイテムがクリックされたときの処理
+                showConfirmationDialog(itemId);
+            }
+        });
         recyclerView.setAdapter(itemAdapter);
 
         // RecordViewModelを初期化
@@ -40,10 +47,9 @@ public class MainActivity extends AppCompatActivity {
         // LiveDataの変更を監視
         allData.observe(this, newData -> {
             // データが変更されたときの処理
-            updateTextView12(newData);
+            updateMoney(newData);
             itemAdapter.setData(newData);
         });
-
 
 
         buttonClickListener = new ButtonClickListener(this);
@@ -53,25 +59,18 @@ public class MainActivity extends AppCompatActivity {
         binding.includedLayout.button2.setOnClickListener(view -> buttonClickListener.onButtonClick(GraphActivity.class));
         binding.button6.setOnClickListener(view -> buttonClickListener.onButtonClick(RecordActivity.class));
     }
+    private void deleteData(long itemId) {
+        // itemIdを使用してデータベースからデータを削除する処理を実装
+        recordViewModel.deleteData(itemId);
+    }
 
 
+    private void updateMoney(List<DataRoom> newData) {
 
-    private void updateTextView12(List<DataRoom> newData) {
-        // newDataを使用してtextView12にデータをセットする処理を実装
-        StringBuilder dataText = new StringBuilder();
         int totalIncome = 0;
         int totalExpense = 0;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
-
 
         for (DataRoom data : newData) {
-            String formattedDate = dateFormat.format(new Date(data.getDate()));
-            dataText.append(formattedDate).append("  ");
-            dataText.append(data.getClassification()).append("  ");
-            dataText.append(data.getPrice()).append("  ");
-            dataText.append(data.getAsset()).append("  ");
-            dataText.append(data.getContent()).append("\n");
-
             // "type"が1の場合のみincomeTextに追加
             if (data.getType() == 1) {
                 totalIncome += data.getPrice();
@@ -83,6 +82,26 @@ public class MainActivity extends AppCompatActivity {
         binding.incometext.setText(String.valueOf(totalIncome));
         binding.expensetext.setText(String.valueOf(totalExpense));
         binding.sumtext.setText(String.valueOf(totalIncome - totalExpense));
+    }
+    // 確認ダイアログ
+    private void showConfirmationDialog(final long itemId) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("データを削除しますか？");
+        builder.setPositiveButton("はい", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // はいボタンが押されたときの処理
+                deleteData(itemId);
+            }
+        });
+        builder.setNegativeButton("いいえ", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // いいえボタンが押されたときの処理
+                dialog.dismiss(); // ダイアログを閉じる
+            }
+        });
+        builder.show();
     }
 
 }
