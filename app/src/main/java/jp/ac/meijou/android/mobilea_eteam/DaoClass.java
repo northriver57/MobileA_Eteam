@@ -45,7 +45,8 @@ public interface DaoClass {
     @Query("SELECT * FROM data_room ORDER BY date ASC")
     LiveData<List<DataRoom>> getAllData();
 
-
+    @Query("DELETE FROM data_room WHERE id = :itemId")
+    void deleteData(long itemId);
 
 
 }

@@ -24,6 +24,9 @@ public class RecordViewModel extends AndroidViewModel {
         new InsertAsyncTask(dao).execute(new DataRoom(classification, asset, price, content, date, type));
     }
 
+    public void deleteData(long itemId) {
+        new DeleteAsyncTask(dao).execute(itemId);
+    }
     private static class InsertAsyncTask extends AsyncTask<DataRoom, Void, Void> {
         private DaoClass asyncTaskDao;
 
@@ -34,6 +37,19 @@ public class RecordViewModel extends AndroidViewModel {
         @Override
         protected Void doInBackground(final DataRoom... params) {
             asyncTaskDao.insert(params[0]);
+            return null;
+        }
+    }
+    private static class DeleteAsyncTask extends AsyncTask<Long, Void, Void> {
+        private DaoClass asyncTaskDao;
+
+        DeleteAsyncTask(DaoClass dao) {
+            asyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final Long... params) {
+            asyncTaskDao.deleteData(params[0]);
             return null;
         }
     }
