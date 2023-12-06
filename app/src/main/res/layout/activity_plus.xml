@@ -4,14 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LineActivity">
-
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/lineChartExample"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" />
+    tools:context=".PlusActivity">
 
     <include
         android:id="@+id/includedLayout"
@@ -21,4 +14,15 @@
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="-39dp" />
 
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="plus"
+        app:layout_constraintBottom_toTopOf="@+id/includedLayout"
+        app:layout_constraintEnd_toStartOf="@+id/includedLayout"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/includedLayout"
+        app:layout_constraintTop_toBottomOf="@+id/includedLayout"
+        app:layout_constraintVertical_bias="0.5" />
 </androidx.constraintlayout.widget.ConstraintLayout>
