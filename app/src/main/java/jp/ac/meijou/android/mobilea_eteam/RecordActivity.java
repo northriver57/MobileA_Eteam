@@ -49,13 +49,13 @@ public class RecordActivity extends AppCompatActivity {
         Spinner spinnerClass = findViewById(R.id.spinnerclass);
 
         group.setOnCheckedChangeListener((view, id) -> {
-            if (id == R.id.RadioIncome) {
+            if (id == R.id.RadioCurrent) {
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.ListIncome));
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinnerClass.setAdapter(adapter);
 
                 type.set(1);
-            } else if (id == R.id.RadioExpense) {
+            } else if (id == R.id.RadioFuture) {
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.ListClass));
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinnerClass.setAdapter(adapter);
