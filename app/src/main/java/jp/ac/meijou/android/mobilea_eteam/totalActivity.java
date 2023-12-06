@@ -10,6 +10,7 @@ import jp.ac.meijou.android.mobilea_eteam.databinding.ActivityTotalBinding;
 
 public class totalActivity extends AppCompatActivity {
     private ActivityTotalBinding binding;
+    private ButtonClickListener buttonClickListener;
     private RecordViewModel recordViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +31,12 @@ public class totalActivity extends AppCompatActivity {
 
             createData(newData);
         });
+
+        buttonClickListener = new ButtonClickListener(this);
+
+        binding.includedLayout.button.setOnClickListener(view -> buttonClickListener.onButtonClick(MainActivity.class));
+        binding.includedLayout.button3.setOnClickListener(view -> buttonClickListener.onButtonClick(LineActivity.class));
+        binding.includedLayout.button2.setOnClickListener(view -> buttonClickListener.onButtonClick(PieActivity.class));
 
     }
 
