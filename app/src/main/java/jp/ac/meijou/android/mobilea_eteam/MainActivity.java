@@ -4,7 +4,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import java.util.List;
 import jp.ac.meijou.android.mobilea_eteam.databinding.ActivityMainBinding;
@@ -16,7 +15,6 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private RecordViewModel recordViewModel;
     private ButtonClickListener buttonClickListener;
-    private RecyclerView recyclerView;
     private ItemAdapter itemAdapter;
 
     @Override
@@ -26,16 +24,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         // RecyclerViewの設定
-        recyclerView = findViewById(R.id.listView);
+        RecyclerView recyclerView = findViewById(R.id.listView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         itemAdapter = new ItemAdapter();
-        itemAdapter.setOnItemClickListener(new ItemAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(long itemId) {
-                // アイテムがクリックされたときの処理
-                showConfirmationDialog(itemId);
-            }
-        });
+        // アイテムがクリックされたときの処理
+        itemAdapter.setOnItemClickListener(this::showConfirmationDialog);
         recyclerView.setAdapter(itemAdapter);
 
         // RecordViewModelを初期化
@@ -87,19 +80,13 @@ public class MainActivity extends AppCompatActivity {
     private void showConfirmationDialog(final long itemId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("データを削除しますか？");
-        builder.setPositiveButton("はい", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // はいボタンが押されたときの処理
-                deleteData(itemId);
-            }
+        builder.setPositiveButton("はい", (dialog, which) -> {
+            // はいボタンが押されたときの処理
+            deleteData(itemId);
         });
-        builder.setNegativeButton("いいえ", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // いいえボタンが押されたときの処理
-                dialog.dismiss(); // ダイアログを閉じる
-            }
+        builder.setNegativeButton("いいえ", (dialog, which) -> {
+            // いいえボタンが押されたときの処理
+            dialog.dismiss(); // ダイアログを閉じる
         });
         builder.show();
     }

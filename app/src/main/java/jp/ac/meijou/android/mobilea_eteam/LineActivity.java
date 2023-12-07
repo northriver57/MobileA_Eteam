@@ -79,7 +79,7 @@ public class LineActivity extends AppCompatActivity {
         buttonClickListener = new ButtonClickListener(this);
         binding.includedLayout.button.setOnClickListener(view -> buttonClickListener.onButtonClick(MainActivity.class));
         binding.includedLayout.button4.setOnClickListener(view -> buttonClickListener.onButtonClick(totalActivity.class));
-        binding.includedLayout.button2.setOnClickListener(view -> buttonClickListener.onButtonClick(PieActivity.class));
+        binding.includedLayout.button2.setOnClickListener(view -> buttonClickListener.onButtonClick(GraphActivity.class));
     }
 
     public class CategoryAxisValueFormatter extends ValueFormatter {

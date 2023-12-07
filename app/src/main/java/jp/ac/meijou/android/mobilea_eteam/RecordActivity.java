@@ -6,6 +6,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -17,7 +18,6 @@ import jp.ac.meijou.android.mobilea_eteam.databinding.ActivityRecordBinding;
 public class RecordActivity extends AppCompatActivity {
     private ActivityRecordBinding binding;
     private RecordViewModel recordViewModel;
-    private DaoClass dao;
     private long date;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +27,7 @@ public class RecordActivity extends AppCompatActivity {
 
         // RecordViewModel を初期化
         recordViewModel = new ViewModelProvider(this).get(RecordViewModel.class);
-        dao = AppData.getDatabase(this).daoClass();
+        AppData.getDatabase(this).daoClass();
 
         // 今日の日付を取得
         Calendar today = Calendar.getInstance();
@@ -80,8 +80,7 @@ public class RecordActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 } else {
-                    // タグがnullの場合の処理（デフォルト値のまま）
-                    //Toast
+                Toast.makeText(RecordActivity.this, "収入，支出を選択してください", Toast.LENGTH_SHORT).show();
                 }
             });
 

@@ -15,7 +15,7 @@ public class DataRoom{
     public int price;        //「金額」カラムを定義
     public String content;   //「内容」カラムを定義
     public long date;        //「日付」カラムを定義
-    public int type;
+    public int type;        //「収入，支出の分類」カラムを定義
     /**
      * コンストラクタ
      * @param classification 支出分類
@@ -91,7 +91,7 @@ public class DataRoom{
      * @param asset   更新する「資産の種類」
      * @param price   更新する「金額」
      * @param date    更新する「日付」
-     * @param type
+     * @param type    更新する「収入，支出の分類」
      * @return 更新した「家計簿データ」
      */
 
