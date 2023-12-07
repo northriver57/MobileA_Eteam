@@ -4,8 +4,6 @@ package jp.ac.meijou.android.mobilea_eteam;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.room.Room;
-
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,15 +11,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
-import com.github.mikephil.charting.formatter.ValueFormatter;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -36,7 +31,7 @@ public class GraphActivity extends AppCompatActivity {
     private ActivityGraphBinding binding;
 
     private RecordViewModel recordViewModel;
-
+    private ButtonClickListener buttonClickListener;
     private Spinner spinnerYear;
     private Spinner spinnerMonth;
 
@@ -49,7 +44,11 @@ public class GraphActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
 
+        buttonClickListener = new ButtonClickListener(this);
 
+        binding.includedLayout.button.setOnClickListener(view -> buttonClickListener.onButtonClick(MainActivity.class));
+        binding.includedLayout.button4.setOnClickListener(view -> buttonClickListener.onButtonClick(totalActivity.class));
+        binding.includedLayout.button3.setOnClickListener(view -> buttonClickListener.onButtonClick(LineActivity.class));
 
         // Spinnerを取得
         spinnerYear = findViewById(R.id.yearSpinner);
