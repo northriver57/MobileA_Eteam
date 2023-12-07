@@ -46,6 +46,7 @@ public class RecordViewModel extends AndroidViewModel {
     // 他のメソッドと同様にLiveDataを返すメソッドを作成
     public LiveData<List<DataRoom>> getDataByYearMonth(String yearMonth) {
         return dao.getDataByYearMonth(yearMonth);
+    }
 
     private static class DeleteAsyncTask extends AsyncTask<Long, Void, Void> {
         private DaoClass asyncTaskDao;
