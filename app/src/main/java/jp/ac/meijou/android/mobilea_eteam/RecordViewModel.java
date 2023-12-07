@@ -47,6 +47,7 @@ public class RecordViewModel extends AndroidViewModel {
     public LiveData<List<DataRoom>> getDataByYearMonth(String yearMonth) {
         return dao.getDataByYearMonth(yearMonth);
     }
+
     private static class DeleteAsyncTask extends AsyncTask<Long, Void, Void> {
         private final DaoClass asyncTaskDao;
 
