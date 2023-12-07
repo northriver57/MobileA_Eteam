@@ -7,8 +7,8 @@ import java.util.List;
 
 public class RecordViewModel extends AndroidViewModel {
 
-    private DaoClass dao;
-    private LiveData<List<DataRoom>> allData;
+    private final DaoClass dao;
+    private final LiveData<List<DataRoom>> allData;
 
     public RecordViewModel(Application application) {
         super(application);
@@ -29,7 +29,7 @@ public class RecordViewModel extends AndroidViewModel {
         new DeleteAsyncTask(dao).execute(itemId);
     }
     private static class InsertAsyncTask extends AsyncTask<DataRoom, Void, Void> {
-        private DaoClass asyncTaskDao;
+        private final DaoClass asyncTaskDao;
 
         InsertAsyncTask(DaoClass dao) {
             asyncTaskDao = dao;
@@ -49,7 +49,7 @@ public class RecordViewModel extends AndroidViewModel {
     }
 
     private static class DeleteAsyncTask extends AsyncTask<Long, Void, Void> {
-        private DaoClass asyncTaskDao;
+        private final DaoClass asyncTaskDao;
 
         DeleteAsyncTask(DaoClass dao) {
             asyncTaskDao = dao;
