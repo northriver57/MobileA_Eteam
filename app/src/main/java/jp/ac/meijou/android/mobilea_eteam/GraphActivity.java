@@ -19,10 +19,13 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Currency;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import java.text.NumberFormat;
 
 import jp.ac.meijou.android.mobilea_eteam.databinding.ActivityGraphBinding;
 
@@ -35,7 +38,6 @@ public class GraphActivity extends AppCompatActivity {
     private Spinner spinnerYear;
     private Spinner spinnerMonth;
 
-    private DaoClass dataRoomDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,9 +70,6 @@ public class GraphActivity extends AppCompatActivity {
 
         // 初期値を現在の年月にする
         setInitialYearMonth();
-
-        String selectedYear = (String) spinnerYear.getSelectedItem();
-        String selectedMonth = (String) spinnerMonth.getSelectedItem();
 
         // Spinnerのイベントリスナーをセット
         spinnerYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -169,7 +168,13 @@ public class GraphActivity extends AppCompatActivity {
 
         int sumprice = updateSumPrice(newData);
 
-        String centerText = String.format("%s年%s月\n総支出\n%d円", selectedYear, selectedMonth, sumprice);// グラフの中央に表示するテキスト
+        // 日本円のフォーマットを取得
+        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(Locale.JAPAN);
+
+        // 通貨シンボルを削除
+        String formattedAmount = numberFormat.format(sumprice).replace(numberFormat.getCurrency().getSymbol(), "");
+
+        String centerText = String.format("%s年%s月\n総支出\n%s円", selectedYear, selectedMonth, formattedAmount);// グラフの中央に表示するテキスト
         binding.pieChart.setCenterText(centerText);// グラフの中央にテキストを設定
 
         binding.pieChart.setData(ChartData(newData));
@@ -254,16 +259,6 @@ public class GraphActivity extends AppCompatActivity {
 
         return data;
 
-    }
-
-    private String updateselectedYear(){
-        String Year = (String) spinnerYear.getSelectedItem();
-        return Year;
-    }
-
-    private String updateselectedMonth(){
-        String Month = (String) spinnerMonth.getSelectedItem();
-        return Month;
     }
 
 }
