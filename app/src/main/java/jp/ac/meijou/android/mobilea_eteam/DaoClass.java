@@ -45,7 +45,9 @@ public interface DaoClass {
     @Query("SELECT * FROM data_room ORDER BY date ASC")
     LiveData<List<DataRoom>> getAllData();
 
-
+    // 特定年月のデータを取得するクエリ
+    @Query("SELECT * FROM data_room WHERE strftime('%Y-%m', date / 1000, 'unixepoch') = :yearMonth")
+    LiveData<List<DataRoom>> getDataByYearMonth(String yearMonth);
 
 
 }
