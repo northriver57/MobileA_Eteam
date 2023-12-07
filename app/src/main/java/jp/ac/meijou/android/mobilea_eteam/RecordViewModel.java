@@ -20,6 +20,7 @@ public class RecordViewModel extends AndroidViewModel {
         return allData;
     }
 
+
     public void insertData(String classification, String asset, int price, String content, long date, int type ) {
         new InsertAsyncTask(dao).execute(new DataRoom(classification, asset, price, content, date, type));
     }
@@ -40,6 +41,12 @@ public class RecordViewModel extends AndroidViewModel {
             return null;
         }
     }
+
+
+    // 他のメソッドと同様にLiveDataを返すメソッドを作成
+    public LiveData<List<DataRoom>> getDataByYearMonth(String yearMonth) {
+        return dao.getDataByYearMonth(yearMonth);
+
     private static class DeleteAsyncTask extends AsyncTask<Long, Void, Void> {
         private DaoClass asyncTaskDao;
 
@@ -52,5 +59,6 @@ public class RecordViewModel extends AndroidViewModel {
             asyncTaskDao.deleteData(params[0]);
             return null;
         }
+
     }
 }

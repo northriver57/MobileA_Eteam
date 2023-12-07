@@ -1,24 +1,32 @@
 package jp.ac.meijou.android.mobilea_eteam;
 
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.room.Room;
 
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import jp.ac.meijou.android.mobilea_eteam.databinding.ActivityGraphBinding;
@@ -28,6 +36,12 @@ public class GraphActivity extends AppCompatActivity {
     private ActivityGraphBinding binding;
 
     private RecordViewModel recordViewModel;
+
+    private Spinner spinnerYear;
+    private Spinner spinnerMonth;
+
+    private DaoClass dataRoomDao;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,23 +49,102 @@ public class GraphActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
 
-        // RecordViewModelを初期化
-        recordViewModel = new ViewModelProvider(this).get(RecordViewModel.class);
 
-        // LiveDataを取得
-        LiveData<List<DataRoom>> allData = recordViewModel.getAllData();
 
-        // LiveDataの変更を監視
-        allData.observe(this, newData -> {
-            // データが変更されたときの処理
+        // Spinnerを取得
+        spinnerYear = findViewById(R.id.yearSpinner);
+        spinnerMonth = findViewById(R.id.monthSpinner);
 
-            createPieChart(newData);
+        // 年のデータをセット
+        ArrayAdapter<CharSequence> yearAdapter = ArrayAdapter.createFromResource(
+                this, R.array.years, android.R.layout.simple_spinner_item);
+        yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerYear.setAdapter(yearAdapter);
+
+        // 月のデータをセット
+        ArrayAdapter<CharSequence> monthAdapter = ArrayAdapter.createFromResource(
+                this, R.array.months, android.R.layout.simple_spinner_item);
+        monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerMonth.setAdapter(monthAdapter);
+
+        // 初期値を現在の年月にする
+        setInitialYearMonth();
+
+        String selectedYear = (String) spinnerYear.getSelectedItem();
+        String selectedMonth = (String) spinnerMonth.getSelectedItem();
+
+        // Spinnerのイベントリスナーをセット
+        spinnerYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                Pie(); // プルダウンが選択されたら円グラフのテキスト更新メソッドを呼ぶ
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // 何もしない
+            }
         });
+
+        spinnerMonth.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                Pie(); // プルダウンが選択されたら円グラフのテキスト更新メソッドを呼ぶ
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // 何もしない
+            }
+        });
+
 
 
     }
 
+    private void Pie(){
+        // RecordViewModelを初期化
+        recordViewModel = new ViewModelProvider(this).get(RecordViewModel.class);
 
+        String selectedYear = (String) spinnerYear.getSelectedItem();
+        String selectedMonth = (String) spinnerMonth.getSelectedItem();
+        // 特定の年月のデータを取得
+        String targetYearMonth = String.format("%s-%s", selectedYear, selectedMonth); // 取得したい年月を指定
+        LiveData<List<DataRoom>> dataByYearMonth = recordViewModel.getDataByYearMonth(targetYearMonth);
+
+        // LiveDataの変更を監視
+        dataByYearMonth.observe(this, newData -> {
+            // データが変更されたときの処理
+
+            createPieChart(newData, selectedYear, selectedMonth);
+
+        });
+    }
+
+
+    private void setInitialYearMonth() {
+        // 現在の年月を取得
+        Calendar calendar = Calendar.getInstance();
+        int currentYear = calendar.get(Calendar.YEAR);
+        int currentMonth = calendar.get(Calendar.MONTH) + 1; // 0-indexedなので+1する
+
+        // 年と月の Spinner に初期値をセット
+        String yearString = String.valueOf(currentYear);
+        String monthString = String.format(Locale.getDefault(), "%02d", currentMonth);
+        spinnerYear.setSelection(getIndex(spinnerYear, yearString));
+        spinnerMonth.setSelection(getIndex(spinnerMonth, monthString));
+    }
+
+    private int getIndex(Spinner spinner, String value) {
+        for (int i = 0; i < spinner.getCount(); i++) {
+            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(value)) {
+                return i;
+            }
+        }
+        return 0; // マッチしなかった場合は最初の要素を選択
+    }
+
+    //取得したデータリストから数値の合計を返す
     private int updateSumPrice(List<DataRoom> newData){
         int sum = 0;
 
@@ -62,7 +155,8 @@ public class GraphActivity extends AppCompatActivity {
         return sum;
     }
 
-    private void createPieChart(List<DataRoom> newData) {
+    //円グラフを作成する
+    private void createPieChart(List<DataRoom> newData, String selectedYear, String selectedMonth) {
 
         binding.pieChart.setDrawHoleEnabled(true);//穴あけ
         binding.pieChart.setHoleRadius(30f);//穴サイズ％
@@ -70,8 +164,17 @@ public class GraphActivity extends AppCompatActivity {
         binding.pieChart.setRotationEnabled(false);
         binding.pieChart.getLegend().setEnabled(true);
         binding.pieChart.getDescription().setEnabled(false);//Description Labelの表示を消す
+        binding.pieChart.setCenterTextColor(Color.BLACK);
+        binding.pieChart.setCenterTextSize(14f);
+        binding.pieChart.setDrawEntryLabels(false);// エントリーラベルを非表示にする
+
+        int sumprice = updateSumPrice(newData);
+
+        String centerText = String.format("%s年%s月\n総支出\n%d円", selectedYear, selectedMonth, sumprice);// グラフの中央に表示するテキスト
+        binding.pieChart.setCenterText(centerText);// グラフの中央にテキストを設定
+
         binding.pieChart.setData(ChartData(newData));
-        binding.pieChart.getData().setValueFormatter(new AmountValueFormatter());
+
 
         binding.pieChart.invalidate();//更新
     }
@@ -129,46 +232,39 @@ public class GraphActivity extends AppCompatActivity {
         dataSet.setSelectionShift(0f);
 
         // 色の設定
-        colors.add(ColorTemplate.COLORFUL_COLORS[0]);
-        colors.add(ColorTemplate.COLORFUL_COLORS[1]);
-        colors.add(ColorTemplate.COLORFUL_COLORS[2]);
-        dataSet.setColors(colors);
-        dataSet.setDrawValues(true);
+        colors.add(Color.parseColor("#1f77b4"));
+        colors.add(Color.parseColor("#ff7f0e"));
+        colors.add(Color.parseColor("#2ca02c"));
+        colors.add(Color.parseColor("#d62728"));
+        colors.add(Color.parseColor("#9467bd"));
+        colors.add(Color.parseColor("#17becf"));
+        colors.add(Color.parseColor("#e377c2"));
+        colors.add(Color.parseColor("#bcbd22"));
+        colors.add(Color.parseColor("#7f7f7f"));
+        colors.add(Color.parseColor("#8c564b"));
 
+        dataSet.setColors(colors);
+
+        //データラベルの設定
+        dataSet.setDrawValues(false);
 
         PieData data = new PieData(dataSet);
         data.setValueFormatter(new PercentFormatter());
-        data.setDrawValues(true);
+        data.setDrawValues(false);
 
 
-        // テキストの設定
-        data.setValueTextSize(12f);
-        data.setValueTextColor(Color.WHITE);
         return data;
 
-
     }
 
-    public class AmountValueFormatter extends ValueFormatter {
-        private final DecimalFormat format;
-
-        public AmountValueFormatter() {
-            // 金額のフォーマットを指定
-            format = new DecimalFormat("#,###");
-        }
-
-        @Override
-        public String getFormattedValue(float value) {
-            // カンマで区切った金額を返す
-            return format.format(value);
-        }
-
-        @Override
-        public String getPieLabel(float value, PieEntry pieEntry) {
-            // カンマで区切った金額を返す
-            return format.format(value);
-        }
+    private String updateselectedYear(){
+        String Year = (String) spinnerYear.getSelectedItem();
+        return Year;
     }
 
+    private String updateselectedMonth(){
+        String Month = (String) spinnerMonth.getSelectedItem();
+        return Month;
+    }
 
 }
