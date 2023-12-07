@@ -2,6 +2,8 @@ package jp.ac.meijou.android.mobilea_eteam;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.util.Calendar;
+
 /**
  * 家計簿データクラス（Room）
  */
@@ -84,6 +86,12 @@ public class DataRoom{
         return type;
     }
 
+    public int getMonth() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(date); // dateはlong型の時間スタンプ
+        return calendar.get(Calendar.MONTH) + 1; // 月は0から11で表されるため+1する
+    }
+
     /**
      * 「家計簿データ」を更新
      * @param classification 更新する「支出分類」
@@ -94,6 +102,8 @@ public class DataRoom{
      * @param type
      * @return 更新した「家計簿データ」
      */
+
+
 
     public DataRoom update(String classification, String asset, int price, String content, long date, int type) {
         this.classification = classification;

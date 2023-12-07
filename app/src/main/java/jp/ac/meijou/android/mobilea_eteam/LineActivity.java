@@ -82,37 +82,47 @@ public class LineActivity extends AppCompatActivity {
         binding.includedLayout.button2.setOnClickListener(view -> buttonClickListener.onButtonClick(PieActivity.class));
     }
 
-    public class CategoryAxisValueFormatter extends ValueFormatter {
-
+    public class MonthAxisValueFormatter extends ValueFormatter {
         @Override
         public String getAxisLabel(float value, AxisBase axis) {
-            // X軸の値(value)をカテゴリーの名前に変換して表示
-            return String.valueOf((int) value);
+            // X軸の値(value)を月の名前に変換して表示
+            int month = (int) value + 1; // 月は1から始まるため
+            return month + "月";
         }
     }
 
+
     private void updateLineChart(List<DataRoom> newData) {
-        // カテゴリーごとの合計を算出
-        Map<String, Float> categoryTotal = new HashMap<>();
+        // カテゴリーごとの月ごとの合計を算出
+        Map<String, Map<Integer, Float>> categoryMonthTotal = new HashMap<>();
 
         for (DataRoom data : newData) {
             String category = data.getClassification(); // カテゴリー名を取得
+            int month = data.getMonth(); // 月を取得
 
-            if (!categoryTotal.containsKey(category)) {
-                categoryTotal.put(category, 0f);
+            if (!categoryMonthTotal.containsKey(category)) {
+                categoryMonthTotal.put(category, new HashMap<>());
             }
 
-            float total = categoryTotal.get(category);
+            Map<Integer, Float> monthTotal = categoryMonthTotal.get(category);
+
+            if (!monthTotal.containsKey(month)) {
+                monthTotal.put(month, 0f);
+            }
+
+            float total = monthTotal.get(month);
             total += data.getPrice();
-            categoryTotal.put(category, total);
+            monthTotal.put(month, total);
         }
 
         // グラフデータの作成
         List<Entry> entryList = new ArrayList<>();
 
         // カテゴリーごとにデータを抽出
-        for (Map.Entry<String, Float> entry : categoryTotal.entrySet()) {
-            entryList.add(new Entry(entryList.size(), entry.getValue()));
+        for (Map<Integer, Float> monthTotal : categoryMonthTotal.values()) {
+            for (Map.Entry<Integer, Float> entry : monthTotal.entrySet()) {
+                entryList.add(new Entry(entry.getKey() - 1, entry.getValue()));
+            }
         }
 
         List<ILineDataSet> lineDataSets = new ArrayList<>();
@@ -131,9 +141,8 @@ public class LineActivity extends AppCompatActivity {
         xAxis.setDrawGridLines(false);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
 
-        // X軸にカテゴリー名を表示するための設定
-        List<String> categories = new ArrayList<>(categoryTotal.keySet());
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(categories));
+        // X軸に月の名前を表示するための設定
+        xAxis.setValueFormatter(new MonthAxisValueFormatter());
         xAxis.setGranularity(1f);
         lineChart.getDescription().setEnabled(false);
 
@@ -141,13 +150,14 @@ public class LineActivity extends AppCompatActivity {
         YAxis leftYAxis = lineChart.getAxisLeft();
         leftYAxis.setDrawGridLines(false);
         leftYAxis.setAxisMinimum(0f);
-        leftYAxis.setAxisMaximum(100000f);
+        leftYAxis.setAxisMaximum(50000f);
         lineChart.getAxisLeft().setDrawGridLines(false);
         lineChart.getAxisRight().setDrawGridLines(false);
         lineChart.getAxisRight().setEnabled(false);
 
         lineChart.invalidate();
     }
+
 
     private void updateLineChartForCategory(List<DataRoom> newData, String selectedCategory) {
         // 選択されたカテゴリーにフィルタリング
@@ -162,10 +172,3 @@ public class LineActivity extends AppCompatActivity {
         updateLineChart(filteredData);
     }
 }
-
-
-
-
-
-
-
