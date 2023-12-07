@@ -71,16 +71,6 @@
         app:layout_constraintStart_toStartOf="@+id/textView3"
         app:layout_constraintTop_toTopOf="@+id/incometext" />
 
-    <TextView
-        android:id="@+id/textView12"
-        android:layout_width="276dp"
-        android:layout_height="238dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="40dp"
-        android:text="TextView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
-
     <Button
         android:id="@+id/button6"
         android:layout_width="75dp"
@@ -100,6 +90,16 @@
         android:layout_height="match_parent"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="-39dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listView"
+        android:layout_width="338dp"
+        android:layout_height="342dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
