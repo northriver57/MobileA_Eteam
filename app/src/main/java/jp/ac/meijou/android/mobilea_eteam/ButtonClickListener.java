@@ -29,12 +29,12 @@ public class ButtonClickListener {
 
     // ボタン2がクリックされたときの動作
     public void onButton2Click() {
-        onButtonClick(PieActivity.class);
+        onButtonClick(GraphActivity.class);
     }
 
     // ボタン6がクリックされたときの動作
     public void onButton6Click() {
-        onButtonClick(PlusActivity.class);
+        onButtonClick(RecordActivity.class);
     }
 
 

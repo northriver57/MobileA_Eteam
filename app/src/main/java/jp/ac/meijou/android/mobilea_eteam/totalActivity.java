@@ -15,7 +15,6 @@ import jp.ac.meijou.android.mobilea_eteam.databinding.ActivityTotalBinding;
 public class totalActivity extends AppCompatActivity {
     private ActivityTotalBinding binding;
     private ButtonClickListener buttonClickListener;
-    private RecordViewModel recordViewModel;
 
     int check = -1;
     @Override
@@ -26,7 +25,7 @@ public class totalActivity extends AppCompatActivity {
 
 
         // RecordViewModelを初期化
-        recordViewModel = new ViewModelProvider(this).get(RecordViewModel.class);
+        RecordViewModel recordViewModel = new ViewModelProvider(this).get(RecordViewModel.class);
 
         // LiveDataを取得
         LiveData<List<DataRoom>> allData = recordViewModel.getAllData();
@@ -51,7 +50,7 @@ public class totalActivity extends AppCompatActivity {
 
         binding.includedLayout.button.setOnClickListener(view -> buttonClickListener.onButtonClick(MainActivity.class));
         binding.includedLayout.button3.setOnClickListener(view -> buttonClickListener.onButtonClick(LineActivity.class));
-        binding.includedLayout.button2.setOnClickListener(view -> buttonClickListener.onButtonClick(PieActivity.class));
+        binding.includedLayout.button2.setOnClickListener(view -> buttonClickListener.onButtonClick(GraphActivity.class));
 
 
     }
