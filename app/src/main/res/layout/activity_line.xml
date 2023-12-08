@@ -7,7 +7,7 @@
     tools:context=".LineActivity">
 
     <Spinner
-        android:id="@+id/spinner"
+        android:id="@+id/yearSpinner"
         android:layout_width="211dp"
         android:layout_height="46dp"
         android:entries="@array/ListClass"
@@ -16,6 +16,19 @@
         app:layout_constraintStart_toEndOf="@+id/includedLayout"
         app:layout_constraintTop_toBottomOf="@+id/lineChartExample"
         app:layout_constraintVertical_bias="0.0" />
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="211dp"
+        android:layout_height="46dp"
+        android:entries="@array/ListClass"
+        app:layout_constraintBottom_toTopOf="@+id/yearSpinner"
+        app:layout_constraintEnd_toStartOf="@+id/yearSpinner"
+        app:layout_constraintStart_toEndOf="@+id/yearSpinner"
+        app:layout_constraintTop_toBottomOf="@+id/yearSpinner"
+        app:layout_constraintVertical_bias="0.0" />
+
+
 
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/lineChartExample"

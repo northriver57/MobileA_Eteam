@@ -92,6 +92,11 @@ public class DataRoom{
         return calendar.get(Calendar.MONTH) + 1; // 月は0から11で表されるため+1する
     }
 
+    public int getYear() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(date);
+        return calendar.get(Calendar.YEAR);
+    }
     /**
      * 「家計簿データ」を更新
      * @param classification 更新する「支出分類」
