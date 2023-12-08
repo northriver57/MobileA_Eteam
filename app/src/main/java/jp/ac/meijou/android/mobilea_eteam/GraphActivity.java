@@ -6,11 +6,12 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -19,7 +20,6 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Currency;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -38,6 +38,7 @@ public class GraphActivity extends AppCompatActivity {
     private Spinner spinnerYear;
     private Spinner spinnerMonth;
 
+    private Map<String, List<DataRoom>> categorizedData = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +115,9 @@ public class GraphActivity extends AppCompatActivity {
         dataByYearMonth.observe(this, newData -> {
             // データが変更されたときの処理
 
+
+            textDisplay(newData);
+
             createPieChart(newData, selectedYear, selectedMonth);
 
         });
@@ -168,14 +172,10 @@ public class GraphActivity extends AppCompatActivity {
 
         int sumprice = updateSumPrice(newData);
 
-        // 日本円のフォーマットを取得
-        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(Locale.JAPAN);
 
-        // 通貨シンボルを削除
-        String formattedAmount = numberFormat.format(sumprice).replace(numberFormat.getCurrency().getSymbol(), "");
-
-        String centerText = String.format("%s年%s月\n総支出\n%s円", selectedYear, selectedMonth, formattedAmount);// グラフの中央に表示するテキスト
+        String centerText = String.format("%s年%s月\n総支出\n%s", selectedYear, selectedMonth, changeMoneyFormat(sumprice));// グラフの中央に表示するテキスト
         binding.pieChart.setCenterText(centerText);// グラフの中央にテキストを設定
+
 
         binding.pieChart.setData(ChartData(newData));
 
@@ -216,36 +216,66 @@ public class GraphActivity extends AppCompatActivity {
         List<DataRoom> MiscellaneousExpensesData = categorizedData.get("雑費");
         List<DataRoom> otherData = categorizedData.get("その他");
 
-        Log.v("tag", "" + TransportationExpensesData + TransportationExpensesData.size());
 
         //割合とそのラベルを直接入力
-        if(LivingExpenses.size() > 0) rate.add(new PieEntry(updateSumPrice(LivingExpenses), "生活費"));
-        if(foodExpensesData.size() > 0) rate.add(new PieEntry((float) updateSumPrice(foodExpensesData), "食費"));
-        if(ClothingData.size() > 0) rate.add(new PieEntry((float) updateSumPrice(ClothingData), "衣類"));
-        if(TransportationExpensesData.size() > 0) rate.add(new PieEntry((float) updateSumPrice(TransportationExpensesData), "交通費"));
-        if(MedicalExpensesData.size() > 0) rate.add(new PieEntry((float) updateSumPrice(MedicalExpensesData), "医療費"));
-        if(SocialExpensesData.size() > 0) rate.add(new PieEntry((float) updateSumPrice(SocialExpensesData), "交際費"));
-        if(EntertainmentData.size() > 0) rate.add(new PieEntry((float) updateSumPrice(EntertainmentData), "娯楽費"));
-        if(CommunicationExpensesData.size() > 0) rate.add(new PieEntry((float) updateSumPrice(CommunicationExpensesData), "通信費"));
-        if(MiscellaneousExpensesData.size() > 0) rate.add(new PieEntry((float) updateSumPrice(MiscellaneousExpensesData), "雑費"));
-        if(otherData.size() > 0) rate.add(new PieEntry((float) updateSumPrice(otherData), "その他"));
+        // 色の設定
+        if(LivingExpenses.size() > 0) {
+            rate.add(new PieEntry(updateSumPrice(LivingExpenses), "生活費"));
+            colors.add(Color.parseColor("#1f77b4"));
+        }
+
+        if(foodExpensesData.size() > 0){
+            rate.add(new PieEntry((float) updateSumPrice(foodExpensesData), "食費"));
+            colors.add(Color.parseColor("#ff7f0e"));
+        }
+
+        if(ClothingData.size() > 0){
+            rate.add(new PieEntry((float) updateSumPrice(ClothingData), "衣類"));
+            colors.add(Color.parseColor("#2ca02c"));
+        }
+
+        if(TransportationExpensesData.size() > 0){
+            rate.add(new PieEntry((float) updateSumPrice(TransportationExpensesData), "交通費"));
+            colors.add(Color.parseColor("#d62728"));
+        }
+
+        if(MedicalExpensesData.size() > 0){
+            rate.add(new PieEntry((float) updateSumPrice(MedicalExpensesData), "医療費"));
+            colors.add(Color.parseColor("#9467bd"));
+        }
+
+        if(SocialExpensesData.size() > 0){
+            rate.add(new PieEntry((float) updateSumPrice(SocialExpensesData), "交際費"));
+            colors.add(Color.parseColor("#17becf"));
+        }
+
+        if(EntertainmentData.size() > 0){
+            rate.add(new PieEntry((float) updateSumPrice(EntertainmentData), "娯楽費"));
+            colors.add(Color.parseColor("#e377c2"));
+        }
+
+        if(CommunicationExpensesData.size() > 0){
+            rate.add(new PieEntry((float) updateSumPrice(CommunicationExpensesData), "通信費"));
+            colors.add(Color.parseColor("#bcbd22"));
+        }
+
+        if(MiscellaneousExpensesData.size() > 0){
+            rate.add(new PieEntry((float) updateSumPrice(MiscellaneousExpensesData), "雑費"));
+            colors.add(Color.parseColor("#7f7f7f"));
+        }
+
+        if(otherData.size() > 0){
+            rate.add(new PieEntry((float) updateSumPrice(otherData), "その他"));
+            colors.add(Color.parseColor("#8c564b"));
+        }
+
 
 
         PieDataSet dataSet = new PieDataSet(rate, "Data");
         dataSet.setSliceSpace(5f);
         dataSet.setSelectionShift(0f);
 
-        // 色の設定
-        colors.add(Color.parseColor("#1f77b4"));
-        colors.add(Color.parseColor("#ff7f0e"));
-        colors.add(Color.parseColor("#2ca02c"));
-        colors.add(Color.parseColor("#d62728"));
-        colors.add(Color.parseColor("#9467bd"));
-        colors.add(Color.parseColor("#17becf"));
-        colors.add(Color.parseColor("#e377c2"));
-        colors.add(Color.parseColor("#bcbd22"));
-        colors.add(Color.parseColor("#7f7f7f"));
-        colors.add(Color.parseColor("#8c564b"));
+
 
         dataSet.setColors(colors);
 
@@ -259,6 +289,105 @@ public class GraphActivity extends AppCompatActivity {
 
         return data;
 
+    }
+
+    // リストの中身をTextViewに表示する関数
+    public void textDisplay(List<DataRoom> newData) {
+        TextView textView = findViewById(R.id.textView9);
+        TextView moneyText = findViewById(R.id.textView7);
+        TextView rateText = findViewById(R.id.textView10);
+        LinearLayout colorLayout = findViewById(R.id.colorlayout);
+        StringBuilder stringBuilder = new StringBuilder();
+        StringBuilder priceBuilder = new StringBuilder();
+        StringBuilder rateBuilder = new StringBuilder();
+        StringBuilder colorBuilder = new StringBuilder();
+        List<List<DataRoom>> listOfLists = new ArrayList<>();
+        List<String> listName = new ArrayList<>();
+        List<String> listColor = new ArrayList<>();
+
+        int count = 0;
+
+        //全体の合計
+        int allprice = updateSumPrice(newData);
+
+        // string-arrayから配列を取得
+        String[] listClassArray = getResources().getStringArray(R.array.ListClass);
+
+        //円グラフで使用している色一覧
+        String[] graphColor = {"#1f77b4","#ff7f0e","#2ca02c","#d62728","#9467bd","#17becf","#e377c2","#bcbd22","#7f7f7f","#8c564b"};
+
+        // 初期化
+        for (String genre : getResources().getStringArray(R.array.ListClass)) {
+            categorizedData.put(genre, new ArrayList<>());
+        }
+
+        // LinearLayout内の既存のすべてのViewを削除
+        colorLayout.removeAllViews();
+
+        // ジャンルごとにデータを分類
+        for (DataRoom data : newData) {
+            String genre = data.getClassification(); // ここでジャンル名を取得（getName()がジャンル名に対応すると仮定）
+
+            if (categorizedData.containsKey(genre)) {
+                categorizedData.get(genre).add(data);
+                count += 1;
+            }
+        }
+
+        for (int i = 0; i < listClassArray.length; i++) {
+            String array = listClassArray[i];
+            List<DataRoom> a = categorizedData.get(array);
+            if(a.size() > 0) {
+                listOfLists.add(a);
+                listName.add(array);
+                listColor.add(graphColor[i]);
+                colorBuilder.append("■\n");
+            }
+        }
+
+        for(int i = 0; i < listName.size(); i++){
+            //各ジャンルの合計金額
+            int sumprice = updateSumPrice(listOfLists.get(i));
+            double rate = (double) sumprice / (double) allprice * 1000;
+            double pricerate = (int) rate;
+
+            stringBuilder.append(listName.get(i)).append("\n");
+            priceBuilder.append(changeMoneyFormat(sumprice)).append("\n");
+            rateBuilder.append(pricerate / 10).append("％\n");
+
+        }
+
+        String[] lines = colorBuilder.toString().split("\n");
+
+        for(int i = 0; i < lines.length; i++){
+            TextView lineTextView = new TextView(this);
+            //■のセット
+            lineTextView.setText(lines[i]);
+            //カラーを変更
+            int color = Color.parseColor(listColor.get(i));
+            lineTextView.setTextColor(color);
+
+            colorLayout.addView(lineTextView);
+
+        }
+
+        textView.setText(stringBuilder.toString());
+        moneyText.setText(priceBuilder.toString());
+        rateText.setText(rateBuilder.toString());
+
+
+
+    }
+
+    //通貨表示に変更する
+    public String changeMoneyFormat(int money){
+
+        // 日本円のフォーマットを取得
+        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(Locale.JAPAN);
+        //通貨シンボルを削除
+        String formattedAmount = numberFormat.format(money).replace(numberFormat.getCurrency().getSymbol(), "");
+
+        return formattedAmount + "円";
     }
 
 }
