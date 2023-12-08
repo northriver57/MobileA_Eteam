@@ -9,8 +9,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
+
 import jp.ac.meijou.android.mobilea_eteam.databinding.ActivityMainBinding;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -107,6 +110,16 @@ public class MainActivity extends AppCompatActivity {
         binding.includedLayout.button2.setOnClickListener(view -> buttonClickListener.onButtonClick(GraphActivity.class));
         binding.button6.setOnClickListener(view -> buttonClickListener.onButtonClick(RecordActivity.class));
     }
+
+    //通貨表示に変更する
+    public String changeMoneyFormat(int money){
+
+        // 日本円のフォーマットを取得
+        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(Locale.JAPAN);
+        //通貨シンボルを削除
+
+        return numberFormat.format(money).replace(numberFormat.getCurrency().getSymbol(), "");
+    }
     private void deleteData(long itemId) {
         // itemIdを使用してデータベースからデータを削除する処理を実装
         recordViewModel.deleteData(itemId);
@@ -127,9 +140,11 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        binding.incometext.setText(String.valueOf(totalIncome));
-        binding.expensetext.setText(String.valueOf(totalExpense));
-        binding.sumtext.setText(String.valueOf(totalIncome - totalExpense));
+
+
+        binding.incometext.setText(String.valueOf(changeMoneyFormat(totalIncome)));
+        binding.expensetext.setText(String.valueOf(changeMoneyFormat(totalExpense)));
+        binding.sumtext.setText(String.valueOf(changeMoneyFormat(totalIncome - totalExpense)));
     }
 
     private void updateData() {
