@@ -6,23 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <CalendarView
-        android:id="@+id/calendarView"
-        android:layout_width="403dp"
-        android:layout_height="297dp"
-        android:layout_marginStart="4dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="56dp"
-        android:layout_marginTop="16dp"
         android:text="収入"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/calendarView" />
+        app:layout_constraintTop_toBottomOf="@+id/yearSpinner" />
 
     <TextView
         android:id="@+id/textView2"
@@ -100,6 +91,57 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
+    <!-- 年のSpinner -->
+    <Spinner
+        android:id="@+id/yearSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="24dp"
+        android:entries="@array/years"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toStartOf="@id/yearLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- 年のラベル -->
+    <TextView
+        android:id="@+id/yearLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/yearSpinner"
+        android:text="年"
+        app:layout_constraintTop_toTopOf="@+id/yearSpinner"
+        app:layout_constraintStart_toEndOf="@id/yearSpinner"
+        app:layout_constraintEnd_toStartOf="@id/monthSpinner"
+        tools:layout_editor_absoluteX="146dp" />
+
+    <!-- 月のSpinner -->
+    <Spinner
+        android:id="@+id/monthSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/yearLabel"
+        android:entries="@array/months"
+        app:layout_constraintTop_toTopOf="@+id/yearSpinner"
+        app:layout_constraintStart_toEndOf="@id/yearLabel"
+        app:layout_constraintEnd_toStartOf="@id/monthLabel"
+        tools:layout_editor_absoluteX="172dp" />
+
+    <!-- 月のラベル -->
+    <TextView
+        android:id="@+id/monthLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/monthSpinner"
+        android:text="月"
+        app:layout_constraintTop_toTopOf="@+id/yearSpinner"
+        app:layout_constraintStart_toEndOf="@id/monthSpinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteX="310dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
