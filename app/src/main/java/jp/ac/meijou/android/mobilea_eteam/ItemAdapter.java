@@ -12,6 +12,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -58,9 +60,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         data.addAll(newData);
         notifyDataSetChanged();
     }
-    public DataRoom getItemAtPosition(int position) {
-        return data.get(position);
-    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -75,7 +75,12 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        DataRoom data = getItemAtPosition(position);
+        // データを取得
+        List<DataRoom> sortedData = sortDataByDate();
+
+        // ソートされたデータから対応するデータを取得
+        DataRoom data = sortedData.get(position);
+
         viewHolder.itemId = data.getId();
         String formattedDate = dateFormat.format(new Date(data.getDate()));
 
@@ -84,6 +89,16 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                 data.getPrice() + "  " +
                 data.getAsset() + "  " +
                 data.getContent());
+    }
+
+    private List<DataRoom> sortDataByDate() {
+        // データを取得
+        List<DataRoom> newData = new ArrayList<>(data);
+
+        // 日にちで昇順にソート
+        Collections.sort(newData, Comparator.comparingLong(DataRoom::getDate));
+
+        return newData;
     }
 
     @Override
