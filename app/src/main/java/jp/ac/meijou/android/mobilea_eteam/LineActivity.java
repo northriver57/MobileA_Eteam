@@ -1,10 +1,15 @@
 package jp.ac.meijou.android.mobilea_eteam;
 
+
+
+
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
@@ -20,6 +25,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +38,8 @@ public class LineActivity extends AppCompatActivity {
     private ButtonClickListener buttonClickListener;
     private LineChart lineChart;
     private Spinner spinner;
+    private Spinner yearSpinner;
+    private int selectedYear;
     private RecordViewModel recordViewModel;
     private LiveData<List<DataRoom>> allData; // 新たに追加
 
@@ -42,7 +50,7 @@ public class LineActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         spinner = findViewById(R.id.spinner);
-
+        yearSpinner = findViewById(R.id.yearSpinner);
         // RecordViewModelを初期化
         recordViewModel = new ViewModelProvider(this).get(RecordViewModel.class);
 
@@ -53,11 +61,35 @@ public class LineActivity extends AppCompatActivity {
         allData.observe(this, newData -> {
             // データが変更されたときの処理
             updateLineChart(newData);
+            setInitialYearMonth();
         });
-
         // LineChartの初期化spinner
         lineChart = findViewById(R.id.lineChartExample);
+        setupYearSpinner();
+        yearSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                Object selectedItem = parentView.getItemAtPosition(position);
+                if (selectedItem instanceof String) {
+                    // 文字列を整数に変換
+                    try {
+                        selectedYear = Integer.parseInt((String) selectedItem);
+                        updateLineChartForCategoryAndYear(allData.getValue(), selectedYear);
+                    } catch (NumberFormatException e) {
+                        // 整数に変換できない場合のエラー処理
+                        e.printStackTrace();
+                    }
+                } else {
+                    // 予期しない型の場合のエラー処理
+                }
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // 何も選択されていない場合の処理
+            }
+
+        });
         // スピナーの選択が変更されたときのリスナーを設定
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -80,16 +112,37 @@ public class LineActivity extends AppCompatActivity {
         binding.includedLayout.button.setOnClickListener(view -> buttonClickListener.onButtonClick(MainActivity.class));
         binding.includedLayout.button4.setOnClickListener(view -> buttonClickListener.onButtonClick(totalActivity.class));
         binding.includedLayout.button2.setOnClickListener(view -> buttonClickListener.onButtonClick(GraphActivity.class));
+
     }
 
     public class MonthAxisValueFormatter extends ValueFormatter {
         @Override
         public String getAxisLabel(float value, AxisBase axis) {
-            // X軸の値(value)を月の名前に変換して表示
-            int month = (int) value + 1; // 月は1から始まるため
+            // 常に1から12までの月を表示
+            int month = ((int) value % 12) + 1;
             return month + "月";
         }
     }
+    private int getIndex(Spinner spinner, String value) {
+        for (int i = 0; i < spinner.getCount(); i++) {
+            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(value)) {
+                return i;
+            }
+        }
+        return 0; // マッチしなかった場合は最初の要素を選択
+    }
+
+    private void setInitialYearMonth() {
+        // 現在の年を取得
+        Calendar calendar = Calendar.getInstance();
+        int currentYear = calendar.get(Calendar.YEAR);
+
+        // 年の Spinner に初期値をセット
+        String yearString = String.valueOf(currentYear);
+        yearSpinner.setSelection(getIndex(yearSpinner, yearString));
+    }
+
+
 
 
     private void updateLineChart(List<DataRoom> newData) {
@@ -133,6 +186,9 @@ public class LineActivity extends AppCompatActivity {
 
         LineData lineData = new LineData(lineDataSets);
 
+        // 以前のデータをクリア
+        lineChart.clear();
+
         // LineChartの設定
         lineChart.setData(lineData);
 
@@ -159,6 +215,30 @@ public class LineActivity extends AppCompatActivity {
     }
 
 
+    private List<String> generateYearList() {
+        List<String> years = new ArrayList<>();
+        // ここで年のリストを生成するロジックを実装
+        // 例: 現在の年から過去10年分をリストに追加
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        for (int i = 0; i < 10; i++) {
+            years.add(String.valueOf(currentYear - i));
+        }
+        return years;
+    }
+    private void updateLineChartForCategoryAndYear(List<DataRoom> newData, int selectedYear) {
+        // 選択された年にフィルタリング
+        List<DataRoom> filteredData = new ArrayList<>();
+        for (DataRoom data : newData) {
+            if (data.getYear() == selectedYear) {
+                filteredData.add(data);
+            }
+        }
+
+        // グラフデータを更新
+        updateLineChart(filteredData);
+    }
+
+
     private void updateLineChartForCategory(List<DataRoom> newData, String selectedCategory) {
         // 選択されたカテゴリーにフィルタリング
         List<DataRoom> filteredData = new ArrayList<>();
@@ -170,5 +250,15 @@ public class LineActivity extends AppCompatActivity {
 
         // グラフデータを更新
         updateLineChart(filteredData);
+    }
+
+
+
+    private void setupYearSpinner() {
+        List<String> years = generateYearList();
+
+        ArrayAdapter<String> yearAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, years);
+        yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        yearSpinner.setAdapter(yearAdapter);
     }
 }
