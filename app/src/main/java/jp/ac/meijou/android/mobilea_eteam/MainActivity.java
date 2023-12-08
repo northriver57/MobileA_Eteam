@@ -76,14 +76,12 @@ public class MainActivity extends AppCompatActivity {
                 // 何もしない
             }
         });
-
         monthSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 // 選択された年月に対応するデータを取得して表示する処理を実装
                 updateData();
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
                 // 何もしない

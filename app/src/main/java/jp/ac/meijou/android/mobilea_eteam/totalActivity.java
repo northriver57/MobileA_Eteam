@@ -16,7 +16,8 @@ public class totalActivity extends AppCompatActivity {
     private ActivityTotalBinding binding;
     private ButtonClickListener buttonClickListener;
 
-    int check = -1;
+    int check = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +36,7 @@ public class totalActivity extends AppCompatActivity {
 
 
         RadioGroup group = findViewById(R.id.radioGroup);
+        group.check(R.id.RadioCurrent);
         group.setOnCheckedChangeListener((view, id) -> {
             if (id == R.id.RadioCurrent) {
                 check = 1;
@@ -131,7 +133,6 @@ public class totalActivity extends AppCompatActivity {
             }
 
         }
-
         total = totalCash + totalEMoney + totalBank + totalEtc;
         binding.cashview.setText(String.valueOf(totalCash));
         binding.emoneyview.setText(String.valueOf(totalEMoney));
