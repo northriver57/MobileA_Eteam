@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import java.util.Calendar;
 import java.util.List;
 import jp.ac.meijou.android.mobilea_eteam.databinding.ActivityMainBinding;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -88,6 +89,18 @@ public class MainActivity extends AppCompatActivity {
                 // 何もしない
             }
         });
+        // 初期値を今日の年月に設定
+        Calendar calendar = Calendar.getInstance();
+        int currentYear = calendar.get(Calendar.YEAR);
+        int currentMonth = calendar.get(Calendar.MONTH) + 1; // 月は0から始まるため+1する
+
+// 年Spinnerの初期値を設定
+        int yearPosition = yearAdapter.getPosition(String.valueOf(currentYear));
+        yearSpinner.setSelection(yearPosition);
+
+// 月Spinnerの初期値を設定
+        int monthPosition = monthAdapter.getPosition(String.valueOf(currentMonth));
+        monthSpinner.setSelection(monthPosition);
 
         buttonClickListener = new ButtonClickListener(this);
 
