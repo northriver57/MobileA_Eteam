@@ -43,10 +43,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                 // アイテムの位置（position）を取得
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION  && onItemClickListener != null) {
-                    long itemId = data.get(position).getId();
-                    // 確認ダイアログを表示
-                    showConfirmationDialog(itemView.getContext(), itemId);
-
+                    onItemClickListener.onItemClick(data.get(position).getId());
                     }
                 });
         }
