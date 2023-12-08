@@ -102,6 +102,12 @@ public class GraphActivity extends AppCompatActivity {
     }
 
     private void Pie(){
+        //非表示ように宣言
+        TextView textView = findViewById(R.id.textView9);
+        TextView moneyText = findViewById(R.id.textView7);
+        TextView rateText = findViewById(R.id.textView10);
+        LinearLayout colorLayout = findViewById(R.id.colorlayout);
+
         // RecordViewModelを初期化
         recordViewModel = new ViewModelProvider(this).get(RecordViewModel.class);
 
@@ -114,11 +120,21 @@ public class GraphActivity extends AppCompatActivity {
         // LiveDataの変更を監視
         dataByYearMonth.observe(this, newData -> {
             // データが変更されたときの処理
+            if(newData != null && newData.size() > 0){
+                textDisplay(newData);
+                binding.pieChart.setVisibility(View.VISIBLE);
+                colorLayout.setVisibility(View.VISIBLE);
+                createPieChart(newData, selectedYear, selectedMonth);
+            }
 
-
-            textDisplay(newData);
-
-            createPieChart(newData, selectedYear, selectedMonth);
+            else {
+                // グラフが表示されない場合
+                binding.pieChart.setVisibility(View.GONE);//グラフを非表示に
+                textView.setText("");
+                moneyText.setText("");
+                rateText.setText("");
+                colorLayout.setVisibility(View.GONE);
+            }
 
         });
     }
@@ -305,8 +321,6 @@ public class GraphActivity extends AppCompatActivity {
         List<String> listName = new ArrayList<>();
         List<String> listColor = new ArrayList<>();
 
-        int count = 0;
-
         //全体の合計
         int allprice = updateSumPrice(newData);
 
@@ -330,7 +344,6 @@ public class GraphActivity extends AppCompatActivity {
 
             if (categorizedData.containsKey(genre)) {
                 categorizedData.get(genre).add(data);
-                count += 1;
             }
         }
 
