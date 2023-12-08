@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -48,6 +50,14 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                 });
         }
     }
+    public String changeMoneyFormat(int money){
+
+        // 日本円のフォーマットを取得
+        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(Locale.JAPAN);
+        //通貨シンボルを削除
+
+        return numberFormat.format(money).replace(numberFormat.getCurrency().getSymbol(), "");
+    }
     public ItemAdapter() {
         this.dateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
     }
@@ -83,7 +93,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
         viewHolder.textView.setText(formattedDate + "  " +
                 data.getClassification() + "  " +
-                data.getPrice() + "  " +
+                changeMoneyFormat(data.getPrice()) + "  " +
                 data.getAsset() + "  " +
                 data.getContent());
     }
