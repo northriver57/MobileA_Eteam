@@ -5,10 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import android.os.Bundle;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+
 import java.util.List;
 import jp.ac.meijou.android.mobilea_eteam.databinding.ActivityMainBinding;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import android.view.View;
+
 
 
 public class MainActivity extends AppCompatActivity {
@@ -22,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+
 
         // RecyclerViewの設定
         RecyclerView recyclerView = findViewById(R.id.listView);
@@ -44,6 +52,42 @@ public class MainActivity extends AppCompatActivity {
             itemAdapter.setData(newData);
         });
 
+        Spinner yearSpinner = findViewById(R.id.yearSpinner);
+        Spinner monthSpinner = findViewById(R.id.monthSpinner);
+
+        // SpinnerにAdapterを設定して選択肢を表示
+        ArrayAdapter<CharSequence> yearAdapter = ArrayAdapter.createFromResource(this, R.array.years, android.R.layout.simple_spinner_item);
+        yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        yearSpinner.setAdapter(yearAdapter);
+        ArrayAdapter<CharSequence> monthAdapter = ArrayAdapter.createFromResource(this, R.array.months, android.R.layout.simple_spinner_item);
+        monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        monthSpinner.setAdapter(monthAdapter);
+
+        // Spinnerの選択が変更されたときのリスナーを設定
+        yearSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                // 選択された年月に対応するデータを取得して表示する処理を実装
+                updateData();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // 何もしない
+            }
+        });
+
+        monthSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                // 選択された年月に対応するデータを取得して表示する処理を実装
+                updateData();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // 何もしない
+            }
+        });
 
         buttonClickListener = new ButtonClickListener(this);
 
@@ -75,6 +119,23 @@ public class MainActivity extends AppCompatActivity {
         binding.incometext.setText(String.valueOf(totalIncome));
         binding.expensetext.setText(String.valueOf(totalExpense));
         binding.sumtext.setText(String.valueOf(totalIncome - totalExpense));
+    }
+
+    private void updateData() {
+        // 選択された年月に対応するデータを取得
+        String selectedYear = ((Spinner) findViewById(R.id.yearSpinner)).getSelectedItem().toString();
+        String selectedMonth = ((Spinner) findViewById(R.id.monthSpinner)).getSelectedItem().toString();
+        String yearMonth = selectedYear + "-" + selectedMonth;
+
+        // LiveDataを取得
+        LiveData<List<DataRoom>> dataByYearMonth = recordViewModel.getDataByYearMonth(yearMonth);
+
+        // LiveDataの変更を監視
+        dataByYearMonth.observe(this, newData -> {
+            // データが変更されたときの処理
+            updateMoney(newData);
+            itemAdapter.setData(newData);
+        });
     }
     // 確認ダイアログ
     private void showConfirmationDialog(final long itemId) {
